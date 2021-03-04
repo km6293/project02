@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mylist">
+
+	<insert id="insert" parameterType="MylistDTO">
+		insert into my_list values (my_list_seq.nextval,#{mnum},#{name}, #{my_id})
+	</insert>
+	
+	
+	<select id="selectAll" resultType="MylistDTO" parameterType="hashmap">
+		<![CDATA[SELECT * from
+		(SELECT num,mnum,name,my_id,rownum r FROM 
+		(SELECT * FROM my_list ORDER BY num desc)
+		ORDER BY num) WHERE my_id=#{my_id} and r >= #{startRow} AND r<= #{endRow}
+		]]>
+	</select>
+	
+	<select id="userCheck" resultType="int" parameterType="MylistDTO">
+      select count(*) from my_list where name = #{name} 
+      
+   </select>
+	
+	<delete id="delete" parameterType="hashmap">
+		delete my_list where name = #{name} and my_id = #{my_id}
+	</delete>
+	
+	<select id="allCount" resultType="int">
+		select count(*) from my_list
+	</select>
+</mapper>
+
